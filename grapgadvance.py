@@ -11,3 +11,38 @@ plt.xlabel('age')
 plt.ylabel('no of people')
 plt.title('myhistogram')
 plt.show()
+#####################################################
+from keras.models import Sequential
+from keras.layers import *
+import numpy as np
+import pandas as pd
+x=pd.read_csv("./Desktop/Logistic_X_Train.csv")
+y =pd.read_csv("./Desktop/Logistic_Y_Train.csv")
+x_test = pd.read_csv("./Desktop/Logistic_X_Test.csv")
+x_test = np.array(x_test)
+x = np.array(x)
+y = np.array(y)
+print(x.shape)
+print(y.shape)
+x_val = x[:450]
+x_train = x[450:]
+y_val=y[:450]
+y_train = y[450:]
+model = Sequential()
+model.add(Dense(16,activation="relu",input_shape=(2,)))
+model.add(Dense(16,activation="relu"))
+model.add(Dense(1,activation="sigmoid"))
+model.summary()
+model.compile(optimizer='rmsprop',loss='binary_crossentropy',metrics=['accuracy'])
+hist = model.fit(x_train,y_train,epochs=60,batch_size=64,validation_data=(x_val,y_val))
+import matplotlib.pyplot as plt
+a = hist.history["val_loss"]
+b = hist.history["val_accuracy"]
+c = hist.history["accuracy"]
+d =hist.history["loss"]
+plt.plot(a,label="val_loss")
+plt.plot(b,label="val_accuracy")
+plt.plot(c,label="accuracy")
+plt.plot(d,label="loss")
+plt.legend()
+plt.show()
